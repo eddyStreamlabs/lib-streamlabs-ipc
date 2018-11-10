@@ -38,22 +38,22 @@ namespace ipc {
 		bool m_isInitialized = false;
 
 		// Functions		
-		std::map<std::string, std::shared_ptr<ipc::collection>> m_classes;
+		std::map<std::string, std::shared_ptr<ipc::collection> > m_classes;
 
 		// Socket
 		size_t backlog = 40;
 		std::mutex m_sockets_mtx;
-		std::list<std::shared_ptr<os::windows::named_pipe>> m_sockets;
+		//std::list<std::shared_ptr<os::windows::named_pipe> > m_sockets;
 		std::string m_socketPath = "";
 
 		// Client management.
 		std::mutex m_clients_mtx;
-		std::map<std::shared_ptr<os::windows::named_pipe>, std::shared_ptr<server_instance>> m_clients;
+		//std::map<std::shared_ptr<os::windows::named_pipe>, std::shared_ptr<server_instance> > m_clients;
 
 		// Event Handlers
-		std::pair<server_connect_handler_t, void*> m_handlerConnect;
-		std::pair<server_disconnect_handler_t, void*> m_handlerDisconnect;
-		std::pair<server_message_handler_t, void*> m_handlerMessage;
+		//std::pair<server_connect_handler_t, void*> m_handlerConnect;
+		//std::pair<server_disconnect_handler_t, void*> m_handlerDisconnect;
+		//std::pair<server_message_handler_t, void*> m_handlerMessage;
 
 		// Worker
 		struct {
@@ -63,8 +63,8 @@ namespace ipc {
 
 		void watcher();
 
-		void spawn_client(std::shared_ptr<os::windows::named_pipe> socket);
-		void kill_client(std::shared_ptr<os::windows::named_pipe> socket);
+		//void spawn_client(std::shared_ptr<os::windows::named_pipe> socket);
+		//void kill_client(std::shared_ptr<os::windows::named_pipe> socket);
 
 		public:
 		server();

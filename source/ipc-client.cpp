@@ -35,7 +35,7 @@ using namespace std::placeholders;
 static const size_t buffer_size = 128 * 1024 * 1024;
 
 void ipc::client::worker() {
-	os::error ec = os::error::Success;
+	/*os::error ec = os::error::Success;
 	std::vector<ipc::value> proc_rval;
 
 	while (m_socket->is_connected() && !m_watcher.stop) {
@@ -46,7 +46,7 @@ void ipc::client::worker() {
 				if (ec == os::error::Disconnected) {
 					break;
 				} else {
-					throw std::exception("Unexpected error.");
+					throw std::exception((const std::exception&)"Unexpected error.");
 				}
 			}
 		}
@@ -61,23 +61,23 @@ void ipc::client::worker() {
 			} else if (ec == os::error::Disconnected) {
 				break;
 			} else if (ec == os::error::Error) {
-				throw std::exception("Error");
+				throw std::exception((const std::exception&)"Error");
 			}
 		}
-	}
+	}*/
 
 	// Call any remaining callbacks.
-	proc_rval.resize(1);
+	/*proc_rval.resize(1);
 	proc_rval[0].type = ipc::type::Null;
-	proc_rval[0].value_str = "Lost IPC Connection";
+	proc_rval[0].value_str = "Lost IPC Connection";*/
 
 	{ // ToDo: Figure out better way of registering functions, perhaps even a way to have "events" across a IPC connection.
 		std::unique_lock<std::mutex> ulock(m_lock);
-		for (auto& cb : m_cb) {
+		/*for (auto& cb : m_cb) {
 			cb.second.first(cb.second.second, proc_rval);
 		}
 
-		m_cb.clear();
+		m_cb.clear();*/
 	}
 }
 
@@ -94,12 +94,12 @@ void ipc::client::read_callback_init(os::error ec, size_t size) {
 #endif
 		if (n_size != 0) {
 			m_watcher.buf.resize(n_size);
-			ec2 = m_socket->read(m_watcher.buf.data(), m_watcher.buf.size(), m_rop, std::bind(&client::read_callback_msg, this, _1, _2));
+			// ec2 = m_socket->read(m_watcher.buf.data(), m_watcher.buf.size(), m_rop, std::bind(&client::read_callback_msg, this, _1, _2));
 			if (ec2 != os::error::Pending && ec2 != os::error::Success) {
 				if (ec2 == os::error::Disconnected) {
 					return;
 				} else {
-					throw std::exception("Unexpected error.");
+					throw std::exception((const std::exception&)"Unexpected error.");
 				}
 			}
 		}
@@ -162,7 +162,7 @@ void ipc::client::read_callback_msg(os::error ec, size_t size) {
 #endif
 
 	// Find the callback function.
-	std::unique_lock<std::mutex> ulock(m_lock);
+	/*std::unique_lock<std::mutex> ulock(m_lock);
 	auto cb2 = m_cb.find(fnc_reply_msg.uid.value_union.ui64);
 	if (cb2 == m_cb.end()) {
 #ifdef _DEBUG
@@ -170,7 +170,7 @@ void ipc::client::read_callback_msg(os::error ec, size_t size) {
 #endif
 		return;
 	}
-	cb = cb2->second;
+	cb = cb2->second;*/
 
 	// Decode return values or errors.
 	if (fnc_reply_msg.error.value_str.size() > 0) {
@@ -188,7 +188,7 @@ void ipc::client::read_callback_msg(os::error ec, size_t size) {
 
 	// Remove cb entry
 	/// ToDo: Figure out better way of registering functions, perhaps even a way to have "events" across a IPC connection.
-	m_cb.erase(fnc_reply_msg.uid.value_union.ui64);
+	//m_cb.erase(fnc_reply_msg.uid.value_union.ui64);
 
 #ifdef _DEBUG
 	ipc::log("(read) %8llu: Done.", fnc_reply_msg.uid.value_union.ui64);
@@ -196,10 +196,10 @@ void ipc::client::read_callback_msg(os::error ec, size_t size) {
 }
 
 ipc::client::client(std::string socketPath) {
-	m_socket = std::make_unique<os::windows::named_pipe>(os::open_only, socketPath, os::windows::pipe_read_mode::Byte);
+	//m_socket = std::make_unique<os::windows::named_pipe>(os::open_only, socketPath, os::windows::pipe_read_mode::Byte);
 }
 
-ipc::client::~client() {
+/*ipc::client::~client() {
 	m_watcher.stop = true;
 	if (m_watcher.worker.joinable()) {
 		m_watcher.worker.join();
@@ -458,4 +458,4 @@ std::vector<ipc::value> ipc::client::call_synchronous_helper(std::string cname, 
 	}
 
 	return std::move(cd.values);
-}
+}*/

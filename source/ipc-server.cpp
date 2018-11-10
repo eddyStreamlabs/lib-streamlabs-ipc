@@ -28,23 +28,25 @@ void ipc::server::watcher() {
 	struct pending_accept {
 		server* parent;
 		std::shared_ptr<os::async_op> op;
-		std::shared_ptr<os::windows::named_pipe> socket;
+		// std::shared_ptr<os::windows::named_pipe> socket;
 		std::chrono::high_resolution_clock::time_point start;
 
 		void accept_client_cb(os::error ec, size_t length) {
 			if (ec == os::error::Connected) {
 				// A client has connected, so spawn a new client.
-				parent->spawn_client(socket);
+				// parent->spawn_client(socket);
 			}
 			op->invalidate();
 		}
 	};
 
+#ifdef WIN32
 	std::map<std::shared_ptr<os::windows::named_pipe>, pending_accept> pa_map;
-
+#endif
 	while (!m_watcher.stop) {
+		// NEEDS TO BE IMPLEMENTED
 		// Verify the state of sockets.
-		{
+		/*{
 			std::unique_lock<std::mutex> ul(m_sockets_mtx);
 			for (auto socket : m_sockets) {
 				auto pending = pa_map.find(socket);
@@ -72,7 +74,7 @@ void ipc::server::watcher() {
 
 		// Wait for sockets to connect.
 		std::vector<os::waitable*> waits;
-		std::vector<std::shared_ptr<os::windows::named_pipe>> idx_to_socket;
+		std::vector<std::shared_ptr<os::windows::named_pipe> > idx_to_socket;
 		for (auto kv : pa_map) {
 			waits.push_back(kv.second.op.get());
 			idx_to_socket.push_back(kv.first);
@@ -95,10 +97,10 @@ void ipc::server::watcher() {
 			}
 		} else {
 			// Unknown error.
-		}
+		}*/
 	}
 }
-
+/*
 void ipc::server::spawn_client(std::shared_ptr<os::windows::named_pipe> socket) {
 	std::unique_lock<std::mutex> ul(m_clients_mtx);
 	std::shared_ptr<ipc::server_instance> client = std::make_shared<ipc::server_instance>(this, socket);
@@ -113,12 +115,12 @@ void ipc::server::kill_client(std::shared_ptr<os::windows::named_pipe> socket) {
 		m_handlerDisconnect.first(m_handlerDisconnect.second, 0);
 	}
 	m_clients.erase(socket);
-}
+}*/
 
 ipc::server::server() {
 	// Start Watcher
 	m_watcher.stop = false;
-	m_watcher.worker = std::thread(std::bind(&ipc::server::watcher, this));
+	//m_watcher.worker = std::thread(std::bind(&ipc::server::watcher, this));
 }
 
 ipc::server::~server() {
@@ -135,14 +137,14 @@ void ipc::server::initialize(std::string socketPath) {
 
 	try {
 		std::unique_lock<std::mutex> ul(m_sockets_mtx);
-		m_sockets.insert(m_sockets.end(),
+		/*m_sockets.insert(m_sockets.end(),
 			std::make_shared<os::windows::named_pipe>(os::create_only, socketPath, 255,
 				os::windows::pipe_type::Byte, os::windows::pipe_read_mode::Byte, true));
 		for (size_t idx = 1; idx < backlog; idx++) {
 			m_sockets.insert(m_sockets.end(),
 				std::make_shared<os::windows::named_pipe>(os::create_only, socketPath, 255,
 					os::windows::pipe_type::Byte, os::windows::pipe_read_mode::Byte, false));
-		}
+		}*/
 	} catch (std::exception e) {
 		throw e;
 	}
@@ -161,16 +163,16 @@ void ipc::server::finalize() {
 
 	{ // Kill/Disconnect any clients
 		std::unique_lock<std::mutex> ul(m_clients_mtx);
-		while (m_clients.size() > 0) {
+		/*while (m_clients.size() > 0) {
 			kill_client(m_clients.begin()->first);
-		}
+		}*/
 	}
 
 	// Kill any remaining sockets
-	m_sockets.clear();
+	// m_sockets.clear();
 }
 
-void ipc::server::set_connect_handler(server_connect_handler_t handler, void* data) {
+/*void ipc::server::set_connect_handler(server_connect_handler_t handler, void* data) {
 	m_handlerConnect = std::make_pair(handler, data);
 }
 
@@ -180,7 +182,7 @@ void ipc::server::set_disconnect_handler(server_disconnect_handler_t handler, vo
 
 void ipc::server::set_message_handler(server_message_handler_t handler, void* data) {
 	m_handlerMessage = std::make_pair(handler, data);
-}
+}*/
 
 bool ipc::server::register_collection(ipc::collection cls) {
 	return register_collection(std::make_shared<ipc::collection>(cls));
@@ -194,7 +196,7 @@ bool ipc::server::register_collection(std::shared_ptr<ipc::collection> cls) {
 	return true;
 }
 
-bool ipc::server::client_call_function(int64_t cid, std::string cname, std::string fname, std::vector<ipc::value>& args, std::vector<ipc::value>& rval, std::string& errormsg) {
+/*bool ipc::server::client_call_function(int64_t cid, std::string cname, std::string fname, std::vector<ipc::value>& args, std::vector<ipc::value>& rval, std::string& errormsg) {
 	if (m_classes.count(cname) == 0) {
 		errormsg = "Class '" + cname + "' is not registered.";
 		return false;
@@ -210,4 +212,4 @@ bool ipc::server::client_call_function(int64_t cid, std::string cname, std::stri
 	fnc->call(cid, args, rval);
 
 	return true;
-}
+}*/

@@ -30,12 +30,12 @@ namespace ipc {
 	typedef void(*call_return_t)(const void* data, const std::vector<ipc::value>& rval);
 
 	class client {
-		std::unique_ptr<os::windows::named_pipe> m_socket;
+		//std::unique_ptr<os::windows::named_pipe> m_socket;
 		std::shared_ptr<os::async_op> m_rop;
 
 		bool m_authenticated = false;
 		std::mutex m_lock;
-		std::map<int64_t, std::pair<call_return_t, void*>> m_cb;
+		//std::map<int64_t, std::pair<call_return_t, void*> > m_cb;
 
 		// Threading
 		struct {

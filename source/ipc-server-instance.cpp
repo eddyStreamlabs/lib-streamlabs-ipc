@@ -27,14 +27,14 @@ using namespace std::placeholders;
 
 ipc::server_instance::server_instance() {}
 
-ipc::server_instance::server_instance(ipc::server* owner, std::shared_ptr<os::windows::named_pipe> conn) {
+/*ipc::server_instance::server_instance(ipc::server* owner, std::shared_ptr<os::windows::named_pipe> conn) {
 	m_parent = owner;
 	m_socket = conn;
 	m_clientId = 0;
 
 	m_stopWorkers = false;
 	m_worker = std::thread(std::bind(&server_instance::worker, this));
-}
+}*/
 
 ipc::server_instance::~server_instance() {
 	// Threading
@@ -43,7 +43,7 @@ ipc::server_instance::~server_instance() {
 		m_worker.join();
 }
 
-bool ipc::server_instance::is_alive() {
+/*bool ipc::server_instance::is_alive() {
 	if (!m_socket->is_connected())
 		return false;
 
@@ -51,9 +51,9 @@ bool ipc::server_instance::is_alive() {
 		return false;
 
 	return true;
-}
+}*/
 
-void ipc::server_instance::worker() {
+void ipc::server_instance::worker() {/*
 	os::error ec = os::error::Success;
 
 	// Prepare Buffers
@@ -69,7 +69,7 @@ void ipc::server_instance::worker() {
 				if (ec == os::error::Disconnected) {
 					break;
 				} else {
-					throw std::exception("Unexpected error.");
+					throw std::exception((const std::exception&)"Unexpected error.");
 				}
 			}
 		}
@@ -87,7 +87,7 @@ void ipc::server_instance::worker() {
 					if (ec == os::error::Disconnected) {
 						break;
 					} else {
-						throw std::exception("Unexpected error.");
+						throw std::exception((const std::exception&)"Unexpected error.");
 					}
 				}
 				m_write_queue.pop();
@@ -111,10 +111,11 @@ void ipc::server_instance::worker() {
 			} else if (code == os::error::Disconnected) {
 				break;
 			} else if (code == os::error::Error) {
-				throw std::exception("Error");
+				throw std::exception((const std::exception&)"Error");
 			}
 		}
 	}
+	*/
 }
 
 void ipc::server_instance::read_callback_init(os::error ec, size_t size) {
@@ -130,14 +131,14 @@ void ipc::server_instance::read_callback_init(os::error ec, size_t size) {
 #endif
 		if (n_size != 0) {
 			m_rbuf.resize(n_size);
-			ec2 = m_socket->read(m_rbuf.data(), m_rbuf.size(), m_rop, std::bind(&server_instance::read_callback_msg, this, _1, _2));
+			/*ec2 = m_socket->read(m_rbuf.data(), m_rbuf.size(), m_rop, std::bind(&server_instance::read_callback_msg, this, _1, _2));
 			if (ec2 != os::error::Pending && ec2 != os::error::Success) {
 				if (ec2 == os::error::Disconnected) {
 					return;
 				} else {
-					throw std::exception("Unexpected error.");
+					throw std::exception((const std::exception&)"Unexpected error.");
 				}
-			}
+			}*/
 		}
 	}
 }
@@ -257,9 +258,9 @@ void ipc::server_instance::read_callback_msg(os::error ec, size_t size) {
 		// Execute
 		proc_rval.resize(0);
 		try {
-			success = m_parent->client_call_function(m_clientId,
+			/*success = m_parent->client_call_function(m_clientId,
 				fnc_call_msg.class_name.value_str, fnc_call_msg.function_name.value_str,
-				fnc_call_msg.arguments, proc_rval, proc_error);			
+				fnc_call_msg.arguments, proc_rval, proc_error);*/
 		} catch (std::exception e) {
 			ipc::log("%8llu: Unexpected exception during client call, error %s.",
 				fnc_call_msg.uid.value_union.ui64, e.what());
@@ -334,14 +335,14 @@ void ipc::server_instance::read_callback_msg(os::error ec, size_t size) {
 			std::string hex_msg = ipc::vectortohex(m_wbuf);
 			ipc::log("????????: %.*s.", hex_msg.size(), hex_msg.data());
 #endif
-			os::error ec2 = m_socket->write(m_wbuf.data(), m_wbuf.size(), m_wop, std::bind(&server_instance::write_callback, this, _1, _2));
+			/*os::error ec2 = m_socket->write(m_wbuf.data(), m_wbuf.size(), m_wop, std::bind(&server_instance::write_callback, this, _1, _2));
 			if (ec2 != os::error::Success && ec2 != os::error::Pending) {
 				if (ec2 == os::error::Disconnected) {
 					return;
 				} else {
-					throw std::exception("Unexpected Error");
+					throw std::exception((const std::exception&)"Unexpected Error");
 				}
-			}
+			}*/
 		} else {
 			m_write_queue.push(std::move(write_buffer));
 		}

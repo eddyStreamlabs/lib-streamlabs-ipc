@@ -85,6 +85,6 @@ namespace ipc {
 
 		private:
 		std::string m_name;
-		std::map<std::string, std::shared_ptr<function>> m_functions;
+		std::map<std::string, std::shared_ptr<function> > m_functions;
 	};
 }

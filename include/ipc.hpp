@@ -55,9 +55,9 @@ namespace ipc {
 
 	namespace message {
 		struct function_call {
-			ipc::value uid = ipc::value(0ull);
+			ipc::value uid = ipc::value(0);
 			ipc::value class_name = ipc::value("");
-			ipc::value function_name = ipc::value("");
+			ipc::value function_name = ipc::value((const char*)"");
 			std::vector<ipc::value> arguments;
 
 			size_t size();
@@ -68,7 +68,7 @@ namespace ipc {
 		struct function_reply {
 			ipc::value uid = ipc::value(0ull);
 			std::vector<ipc::value> values;
-			ipc::value error = ipc::value("");
+			ipc::value error = ipc::value(0);
 
 			size_t size();
 			size_t serialize(std::vector<char>& buf, size_t offset);
@@ -85,7 +85,7 @@ namespace ipc {
 		};
 
 		struct authenticate_reply {
-			ipc::value auth = ipc::value(false);
+			ipc::value auth = ipc::value((bool)false);
 
 			size_t size();
 			size_t serialize(std::vector<char>& buf, size_t offset);

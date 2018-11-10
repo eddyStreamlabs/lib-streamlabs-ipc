@@ -27,7 +27,7 @@ ipc::function::function(std::string name, std::vector<ipc::type> params, call_ha
 	this->m_callHandler.second = data;
 }
 
-ipc::function::function(std::string name, std::vector<ipc::type> params, call_handler_t ptr)
+/*ipc::function::function(std::string name, std::vector<ipc::type> params, call_handler_t ptr)
 	: function(name, params, ptr, nullptr) {}
 
 ipc::function::function(std::string name, std::vector<ipc::type> params, void* data)
@@ -46,7 +46,7 @@ ipc::function::function(std::string name, void* data)
 	: function(name, std::vector<ipc::type>(), nullptr, data) {}
 
 ipc::function::function(std::string name)
-	: function(name, std::vector<ipc::type>(), nullptr, nullptr) {}
+	: function(name, std::vector<ipc::type>(), nullptr, nullptr) {}*/
 
 ipc::function::~function() {}
 
@@ -73,8 +73,8 @@ void ipc::function::set_call_handler(call_handler_t ptr, void* data) {
 	m_callHandler.second = data;
 }
 
-void ipc::function::call(const int64_t id, const std::vector<ipc::value>& args, std::vector<ipc::value>& rval) {
+/*void ipc::function::call(const int64_t id, const std::vector<ipc::value>& args, std::vector<ipc::value>& rval) {
 	if (m_callHandler.first) {
 		return m_callHandler.first(m_callHandler.second, id, args, rval);
 	}
-}
+}*/

@@ -33,7 +33,7 @@ namespace ipc {
 
 		public:
 		server_instance();
-		server_instance(server* owner, std::shared_ptr<os::windows::named_pipe> conn);
+		// server_instance(server* owner, std::shared_ptr<os::windows::named_pipe> conn);
 		~server_instance();
 		
 		bool is_alive();
@@ -48,10 +48,10 @@ namespace ipc {
 		void write_callback(os::error ec, size_t size);		
 		
 		protected:
-		std::shared_ptr<os::windows::named_pipe> m_socket;
+		// std::shared_ptr<os::windows::named_pipe> m_socket;
 		std::shared_ptr<os::async_op> m_wop, m_rop;
 		std::vector<char> m_wbuf, m_rbuf;
-		std::queue<std::vector<char>> m_write_queue;
+		std::queue<std::vector<char> > m_write_queue;
 
 		private:
 		server* m_parent = nullptr;
