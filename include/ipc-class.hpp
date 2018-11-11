@@ -66,22 +66,22 @@ namespace ipc {
 		/**
 		*
 		*/
-		std::shared_ptr<function> get_function(const size_t& idx);
-
-		/**
-		*
-		*/
-		std::shared_ptr<function> get_function(const std::string& name);
-
-		/**
-		*
-		*/
-		std::shared_ptr<function> get_function(const std::string& name, const std::vector<ipc::type>& params);
-
-		/**
-		*
-		*/
-		std::shared_ptr<function> get_function(const std::string& name, const std::vector<ipc::value>& params);
+//		std::shared_ptr<function> get_function(const size_t& idx);
+//
+//		/**
+//		*
+//		*/
+//		std::shared_ptr<function> get_function(const std::string& name);
+//
+//		/**
+//		*
+//		*/
+//		std::shared_ptr<function> get_function(const std::string& name, const std::vector<ipc::type>& params);
+//
+//		/**
+//		*
+//		*/
+//		std::shared_ptr<function> get_function(const std::string& name, const std::vector<ipc::value>& params);
 
 		private:
 		std::string m_name;

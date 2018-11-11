@@ -83,6 +83,6 @@ namespace ipc {
 		std::string m_name, m_nameUnique;
 		std::vector<ipc::type> m_params;
 
-		std::pair<call_handler_t, void*> m_callHandler;
+		// std::pair<call_handler_t, void*> m_callHandler;
 	};
 }

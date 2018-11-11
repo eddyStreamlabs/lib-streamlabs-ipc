@@ -174,6 +174,8 @@ ADD_LIBRARY(${PROJECT_NAME} STATIC
 	${lib-streamlabs-ipc_SOURCES}
 )
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
+
 # Linking
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
 	${lib-streamlabs-ipc_LIBRARIES}

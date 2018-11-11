@@ -23,8 +23,10 @@
 #include <queue>
 #include <thread>
 #include <vector>
+#ifdef WIN32
 #include "source/os/windows/named-pipe.hpp"
-
+#endif
+#include "source/os/error.hpp"
 namespace ipc {
 	class server;
 
@@ -49,7 +51,7 @@ namespace ipc {
 		
 		protected:
 		// std::shared_ptr<os::windows::named_pipe> m_socket;
-		std::shared_ptr<os::async_op> m_wop, m_rop;
+		// std::shared_ptr<os::async_op> m_wop, m_rop;
 		std::vector<char> m_wbuf, m_rbuf;
 		std::queue<std::vector<char> > m_write_queue;
 

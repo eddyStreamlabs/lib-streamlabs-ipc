@@ -24,14 +24,15 @@
 #include <queue>
 #include <thread>
 #include <vector>
+#ifdef 32
 #include "source/os/windows/named-pipe.hpp"
-
+#endif
 namespace ipc {
 	typedef void(*call_return_t)(const void* data, const std::vector<ipc::value>& rval);
 
 	class client {
 		//std::unique_ptr<os::windows::named_pipe> m_socket;
-		std::shared_ptr<os::async_op> m_rop;
+		// std::shared_ptr<os::async_op> m_rop;
 
 		bool m_authenticated = false;
 		std::mutex m_lock;
@@ -45,8 +46,8 @@ namespace ipc {
 		} m_watcher;
 		
 		void worker();
-		void read_callback_init(os::error ec, size_t size);
-		void read_callback_msg(os::error ec, size_t size);
+		// void read_callback_init(os::error ec, size_t size);
+		// void read_callback_msg(os::error ec, size_t size);
 
 		public:
 		client(std::string socketPath);
